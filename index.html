@@ -620,9 +620,7 @@ async function submitTpl(){
 }
 
 // ── AGENT CORE ──
-// Прокси — Cloudflare Worker (решает проблему CORS)
-// После деплоя Worker замените URL на ваш вида https://stroytender.ВАШЛОГИН.workers.dev
-const API = window.PROXY_URL || 'https://stroytender-proxy.ekimov450170.workers.dev';
+const API = 'https://stroytender-proxy.ekimov450170.workers.dev';
 let agentTid='';
 
 async function callClaude(system, userMsg, tools){
