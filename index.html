@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>СтройТендер — Личный кабинет</title>
+<title>СтройТендер — Автоматизация закупок стройматериалов</title>
+<meta name="description" content="ИИ-агент для закупки стройматериалов — находит поставщиков, рассылает запросы, собирает КП">
+<meta name="author" content="СтройТендер">
+<link rel="canonical" href="https://ekimov450170.github.io/stroytender/">
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
@@ -203,7 +206,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
 
 <div class="topbar">
   <div class="tl"><div class="mk">🏗</div>Строй<span>Тендер</span></div>
-  <div class="torg">Организация: <b>СК «Монолит»</b></div>
+  <div class="torg">📧 stroj.ten@yandex.ru · <b>ИИ-агент активен</b></div>
   <div class="tsp"></div>
   <div class="agt-status"><div class="pulse"></div>Агент активен</div>
   <div style="width:1px;height:20px;background:var(--border);margin:0 8px"></div>
@@ -918,7 +921,7 @@ document.getElementById('agent-modal').addEventListener('click',function(e){if(e
   // Show connected status in topbar
   if(s.pub && s.svc && s.tpl){
     const el = document.querySelector('.agt-status');
-    if(el) el.innerHTML = '<div class="pulse"></div>Агент активен · 📧 stroj.ten@yandex.ru';
+    if(el) el.innerHTML = '<div class="pulse"></div>Агент активен · 📧 stroj.ten@yandex.ru · ekimov450170.github.io/stroytender';
   }
 })();
 </script>
