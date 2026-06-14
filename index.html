@@ -620,13 +620,23 @@ async function submitTpl(){
 }
 
 // ── AGENT CORE ──
-const API='https://api.anthropic.com/v1/messages';
+// Прокси — Cloudflare Worker (решает проблему CORS)
+// После деплоя Worker замените URL на ваш вида https://stroytender.ВАШЛОГИН.workers.dev
+const API = window.PROXY_URL || 'https://stroytender-proxy.ekimov450170.workers.dev';
 let agentTid='';
 
 async function callClaude(system, userMsg, tools){
   const body={model:'claude-sonnet-4-6',max_tokens:2000,system,messages:[{role:'user',content:userMsg}]};
   if(tools) body.tools=tools;
-  const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const res=await fetch(API,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(body)
+  });
+  if(!res.ok){
+    const err=await res.text();
+    throw new Error(`API error ${res.status}: ${err.slice(0,200)}`);
+  }
   return res.json();
 }
 
