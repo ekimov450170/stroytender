@@ -194,27 +194,31 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px}
+.hamburger{background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;padding:4px 8px;border-radius:5px;line-height:1;display:none}
+.mob-overlay{display:none;position:fixed;inset:0;top:52px;background:rgba(0,0,0,.5);z-index:98}
+@media(max-width:900px){.hamburger{display:block}.torg{display:none!important}}
 
 /* TOAST */
 .toast{position:fixed;bottom:20px;right:20px;z-index:200;background:var(--green);color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:600;transform:translateY(80px);transition:transform .3s;display:flex;align-items:center;gap:8px;max-width:380px}
 .toast.show{transform:translateY(0)}
 
-@media(max-width:800px){.sidebar{display:none}.g4{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}.tg{grid-template-columns:1fr 1fr}.fg2{grid-template-columns:1fr}.g3{grid-template-columns:1fr}}
+@media(max-width:800px){.sidebar{display:flex;position:fixed;top:52px;left:-210px;bottom:0;z-index:99;transition:left .25s;box-shadow:4px 0 20px rgba(0,0,0,.4)}.sidebar.open{left:0}.g4{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}.tg{grid-template-columns:1fr 1fr}.fg2{grid-template-columns:1fr}.g3{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
 <div class="topbar">
+  <button class="hamburger" onclick="toggleMobileMenu()" id="hamburger">☰</button>
   <div class="tl"><div class="mk">🏗</div>Строй<span>Тендер</span></div>
-  <div class="torg">📧 stroj.ten@yandex.ru · <b>ИИ-агент активен</b></div>
+  <div class="torg" style="display:none" id="torg-desk">📧 stroj.ten@yandex.ru</div>
   <div class="tsp"></div>
   <div class="agt-status"><div class="pulse"></div>Агент активен</div>
-  <div style="width:1px;height:20px;background:var(--border);margin:0 8px"></div>
   <div class="ava">СК</div>
 </div>
 
+<div class="mob-overlay" id="mob-overlay" onclick="closeMobileMenu()"></div>
 <div class="layout">
-<div class="sidebar">
+<div class="sidebar" id="sidebar">
   <div class="ns">Тендеры</div>
   <div class="ni active" onclick="nav('dashboard')"><span class="ic">⊞</span>Дашборд</div>
   <div class="ni" onclick="nav('new')"><span class="ic">✦</span>Новая заявка<div class="nbadge">+</div></div>
@@ -515,6 +519,7 @@ function nav(id){
   if(id==='settings') loadSettingsUI();
   var c=document.getElementById('content');
   if(c) c.scrollTop=0;
+  closeMobileMenu();
 }
 
 // ── SETTINGS ──
@@ -923,6 +928,21 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'),4000);
 }
 document.getElementById('agent-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+// ── MOBILE MENU ──
+function toggleMobileMenu(){
+  var sb=document.getElementById('sidebar');
+  var ov=document.getElementById('mob-overlay');
+  if(!sb) sb=document.querySelector('.sidebar');
+  if(sb) sb.classList.toggle('open');
+  if(ov) ov.style.display = (sb && sb.classList.contains('open')) ? 'block' : 'none';
+}
+function closeMobileMenu(){
+  var sb=document.querySelector('.sidebar');
+  var ov=document.getElementById('mob-overlay');
+  if(sb) sb.classList.remove('open');
+  if(ov) ov.style.display='none';
+}
 
 // ── AUTO-INIT on page load ──
 (function(){
