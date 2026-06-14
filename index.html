@@ -47,9 +47,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
 .nbadge{margin-left:auto;min-width:18px;height:18px;border-radius:9px;background:var(--amber);color:#0d1520;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px}
 
 /* CONTENT */
-.content{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:20px}
-.screen{display:none;flex-direction:column;gap:18px}
-.screen.active{display:flex}
+.content{flex:1;overflow-y:auto;padding:24px}
+.screen{display:none;flex-direction:column;gap:18px;width:100%}
+.screen.active{display:flex;flex-direction:column;gap:18px}
 
 /* PAGE HEADER */
 .ph{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
@@ -219,8 +219,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
   <div class="ni active" onclick="nav('dashboard')"><span class="ic">⊞</span>Дашборд</div>
   <div class="ni" onclick="nav('new')"><span class="ic">✦</span>Новая заявка<div class="nbadge">+</div></div>
   <div class="ni" onclick="nav('list')"><span class="ic">≡</span>Мои тендеры<div class="nbadge">5</div></div>
-  <div class="ns">Результаты</div>
-  <div class="ni" onclick="nav('report')"><span class="ic">◈</span>Последний отчёт</div>
+  <div class="ni" onclick="nav('report')"><span class="ic">◈</span>Отчёт</div>
   <div class="ns">Система</div>
   <div class="ni" onclick="nav('settings')"><span class="ic">⚙</span>Настройки</div>
 </div>
@@ -503,13 +502,19 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
 <script>
 // ── NAV ──
 function nav(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('s-'+id).classList.add('active');
-  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
-  const map={dashboard:0,new:1,list:2,report:3,settings:4};
-  const items=document.querySelectorAll('.ni');
-  if(items[map[id]]) items[map[id]].classList.add('active');
+  document.querySelectorAll('.screen').forEach(function(s){
+    s.style.display='none';
+    s.classList.remove('active');
+  });
+  var target=document.getElementById('s-'+id);
+  if(target){ target.style.display='flex'; target.classList.add('active'); }
+  document.querySelectorAll('.ni').forEach(function(n){ n.classList.remove('active'); });
+  var map={dashboard:0,new:1,list:2,report:3,settings:4};
+  var items=document.querySelectorAll('.ni');
+  if(typeof map[id]!=='undefined' && items[map[id]]) items[map[id]].classList.add('active');
   if(id==='settings') loadSettingsUI();
+  var c=document.getElementById('content');
+  if(c) c.scrollTop=0;
 }
 
 // ── SETTINGS ──
@@ -921,6 +926,11 @@ document.getElementById('agent-modal').addEventListener('click',function(e){if(e
 
 // ── AUTO-INIT on page load ──
 (function(){
+  // Init screens - hide all except dashboard
+  document.querySelectorAll('.screen').forEach(function(s){
+    if(s.id!=='s-dashboard'){ s.style.display='none'; s.classList.remove('active'); }
+    else { s.style.display='flex'; s.classList.add('active'); }
+  });
   const s = getCfg();
   // Init EmailJS immediately so first send works without manual save
   if(s.pub){ try{ emailjs.init({publicKey: s.pub}); }catch(e){} }
