@@ -768,7 +768,7 @@ async function runAgent(userText, cityHint) {
   lg('lsend', '→ [Волна 3] Производители и оптовые базы...');
   var wave3 = [];
   try {
-    var skip2 = dedupe([...wave1,...wave2]).map(function(s){return s.name;}).slice(0,10).join(', ');
+    var skip2 = dedupe(wave1.concat(wave2)).map(function(s){return s.name;}).slice(0,10).join(', ');
     var d3 = await callClaude(
       'Найди производителей и оптовые базы стройматериалов. Поиски: 1) "производитель ' + items + ' Россия дилер ' + city + '" 2) "строительная база ' + city + ' ' + cat + ' склад опт" 3) "' + items + ' доставка ' + city + ' 2025 2026". НЕ повторяй: ' + skip2 + '. Найди email. Верни ТОЛЬКО JSON:\n[{"name":"...","email":"...","phone":"...","site":"...","desc":"...","source":"производитель"}]',
       'Производители: ' + items + ' для ' + city, TOOLS
@@ -779,7 +779,7 @@ async function runAgent(userText, cityHint) {
   } catch(e) { lg('lwarn', '⚠ [Волна 3] ' + e.message); }
 
   // Merge
-  var all = dedupe([].concat(wave1, wave2, wave3));
+  var all = dedupe(wave1.concat(wave2).concat(wave3));
   lg('lok', '✓ Итого после дедупликации: ' + all.length + ' поставщиков');
   setP(65, 'Рассылка запросов...');
   await delay(150);
